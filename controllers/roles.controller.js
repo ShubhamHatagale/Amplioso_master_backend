@@ -58,7 +58,7 @@ exports.updateRecords = async (req, res, next) => {
   if (!errors.isEmpty()) {
     return res.status(401).json({
       status: 401,
-      message: 'Validation Fialed',
+      message: 'Validation Fialed',/** commit changes */
       error: errors  
   })
   }
