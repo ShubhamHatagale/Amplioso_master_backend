@@ -5,7 +5,8 @@ const countryRoutes=require('./countries.route');
 const sectorRoutes=require('./sectors.route');
 const employeeRoute=require('./employee_strength.route');
 const avrageempRoute=require('./average_employee.route');
-const feedbackfreqRoute=require('./feedback_frequencies.route')
+const feedbackfreqRoute=require('./feedback_frequencies.route');
+const packagesRoute=require('./package.route');
 module.exports =(router) =>{    
     companyRoutes(router);
     rolesRoutes(router);
@@ -15,5 +16,6 @@ module.exports =(router) =>{
     employeeRoute(router);
     avrageempRoute(router);
     feedbackfreqRoute(router);
+    packagesRoute(router);
     return router;
 };
