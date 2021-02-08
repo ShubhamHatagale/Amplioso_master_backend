@@ -1,11 +1,11 @@
-const Sector=require('../models/sectors.model');
+const Averageemployee=require('../models/average_employee.model');
 const { validationResult } = require('express-validator');
 const helper=require('../config/helpers')
 
 
 exports.getRecords =async  (req,res,next)=>{
     try {
-          const Data = await Sector.findAll();
+          const Data = await Averageemployee.findAll();
           if(!Data){            
             return res.status(404).json({
               status: 404,
@@ -35,13 +35,13 @@ exports.postRecords=async(req,res,next)=>{
           error: errors  
       })
     }
-    const sector = new Sector({          
-        sector_name:req.body.sector_name,
-        status:req.body.status,
-        created_by:req.body.created_by,
-      updated_by:req.body.updated_by,      
+    const employee = new Averageemployee({          
+        average_employees:req.body.average_employees,
+      status:req.body.status,
+      created_by:req.body.created_by,
+      created_on:req.body.created_on,      
     });
-    sector
+    employee
       .save()
       .then(result => {
         res.status(201).json({
@@ -59,20 +59,20 @@ exports.updateRecords = async (req, res, next) => {
   if (!errors.isEmpty()) {
     return res.status(401).json({
       status: 401,
-      message: 'Validation Fialed',/** commit changes */
+      message: 'Validation Fialed',
       error: errors  
   })
   }
   try{
-  const sectordetails =await Sector.update({
-    sector_name:req.body.sector_name,
+  const employeedetails =await Averageemployee.update({
+    average_employees:req.body.average_employees,
     status:req.body.status,
     created_by:req.body.created_by,
-    updated_by:req.body.updated_by           
+    created_on:req.body.created_on          
 },
-{where: {id: req.params.sectorId} });
+{where: {id: req.params.averageEmpId} });
 
-  if(!sectordetails){
+  if(!employeedetails){
     return res.status(200).json({
       status: 404,
       message: 'No data found'   
@@ -94,10 +94,10 @@ exports.updateRecords = async (req, res, next) => {
 exports.deleteRecords = async (req, res, next) => {
     const id = req.params.id;
     try{
-    const sectordetails=await Sector.destroy({
+    const employeedetails=await Averageemployee.destroy({
         where: { id: id }
        });
-    if(!sectordetails){
+    if(!employeedetails){
       return res.status(200).send({
         status: 404,
         message: 'No data found'   

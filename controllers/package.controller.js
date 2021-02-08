@@ -1,11 +1,11 @@
-const Sector=require('../models/sectors.model');
+const Package=require('../models/package.model');
 const { validationResult } = require('express-validator');
 const helper=require('../config/helpers')
 
 
 exports.getRecords =async  (req,res,next)=>{
     try {
-          const Data = await Sector.findAll();
+          const Data = await Package.findAll();
           if(!Data){            
             return res.status(404).json({
               status: 404,
@@ -35,13 +35,15 @@ exports.postRecords=async(req,res,next)=>{
           error: errors  
       })
     }
-    const sector = new Sector({          
-        sector_name:req.body.sector_name,
-        status:req.body.status,
-        created_by:req.body.created_by,
-      updated_by:req.body.updated_by,      
+    const package = new Package({          
+        package_name:req.body.package_name,
+        no_of_employees:req.body.no_of_employees,
+        end_date:req.body.end_date,
+        start_date:req.body.start_date,
+      created_by:req.body.created_by,
+      created_on:req.body.created_on,      
     });
-    sector
+    package
       .save()
       .then(result => {
         res.status(201).json({
@@ -59,20 +61,22 @@ exports.updateRecords = async (req, res, next) => {
   if (!errors.isEmpty()) {
     return res.status(401).json({
       status: 401,
-      message: 'Validation Fialed',/** commit changes */
+      message: 'Validation Fialed',
       error: errors  
   })
   }
   try{
-  const sectordetails =await Sector.update({
-    sector_name:req.body.sector_name,
-    status:req.body.status,
+  const packagedetails =await Package.update({
+    package_name:req.body.package_name,
+    no_of_employees:req.body.no_of_employees,
+    end_date:req.body.end_date,
+    start_date:req.body.start_date,
     created_by:req.body.created_by,
-    updated_by:req.body.updated_by           
+    created_on:req.body.created_on          
 },
-{where: {id: req.params.sectorId} });
+{where: {id: req.params.packId} });
 
-  if(!sectordetails){
+  if(!packagedetails){
     return res.status(200).json({
       status: 404,
       message: 'No data found'   
@@ -94,10 +98,10 @@ exports.updateRecords = async (req, res, next) => {
 exports.deleteRecords = async (req, res, next) => {
     const id = req.params.id;
     try{
-    const sectordetails=await Sector.destroy({
+    const packagedetails=await Package.destroy({
         where: { id: id }
        });
-    if(!sectordetails){
+    if(!packagedetails){
       return res.status(200).send({
         status: 404,
         message: 'No data found'   

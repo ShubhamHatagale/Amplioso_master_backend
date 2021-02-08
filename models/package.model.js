@@ -1,20 +1,28 @@
 const { INTEGER, ENUM } = require('sequelize');
 const Sequelize=require('sequelize');
 const sequelize=require('../config/database');
-const Sector=sequelize.define('sectors',{
+const Feedbackfreq=sequelize.define('packages',{
     id:{
         type:Sequelize.INTEGER,
         allowNull:false,
         autoIncrement:true,
         primaryKey:true
     },
-    sector_name:{
+    package_name:{
         type:Sequelize.CHAR,
         allowNull:false,
     },
-    status:{
-        type:ENUM('Active','Inactive'),
+    no_of_employees:{
+        type:Sequelize.STRING,
         allowNull:false
+    },
+    start_date:{
+        type:Sequelize.DATE,
+        allowNull:false,
+    },
+    end_date:{
+        type:Sequelize.DATE,
+        allowNull:false,
     },
     created_by:{
         type:Sequelize.INTEGER,
@@ -22,11 +30,11 @@ const Sector=sequelize.define('sectors',{
     },
     created_on:{
         type:Sequelize.DATE,
-        allowNull:true,
+        allowNull:false,
     },
     updated_by:{
         type:Sequelize.INTEGER,
-        allowNull:false,
+        allowNull:true,
     },
     updated_on:{
         type:Sequelize.DATE,
@@ -40,6 +48,6 @@ const Sector=sequelize.define('sectors',{
 },{
     freezeTableName:true
 });
-module.exports=Sector;
+module.exports=Feedbackfreq;
 
 

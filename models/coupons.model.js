@@ -1,32 +1,44 @@
 const { INTEGER, ENUM } = require('sequelize');
 const Sequelize=require('sequelize');
 const sequelize=require('../config/database');
-const Sector=sequelize.define('sectors',{
+const Coupon=sequelize.define('coupons',{
     id:{
         type:Sequelize.INTEGER,
         allowNull:false,
         autoIncrement:true,
         primaryKey:true
     },
-    sector_name:{
+    coupon_name:{
         type:Sequelize.CHAR,
         allowNull:false,
     },
-    status:{
-        type:ENUM('Active','Inactive'),
+    coupon_percentage:{
+        type:Sequelize.INTEGER,
         allowNull:false
     },
+    package:{
+        type:ENUM('Single','Multiple'),
+        allowNull:false
+    },
+    start_date:{
+        type:Sequelize.DATE,
+        allowNull:false,
+    },
+    end_date:{
+        type:Sequelize.DATE,
+        allowNull:false,
+    },   
     created_by:{
         type:Sequelize.INTEGER,
         allowNull:false,
     },
     created_on:{
         type:Sequelize.DATE,
-        allowNull:true,
+        allowNull:false,
     },
     updated_by:{
         type:Sequelize.INTEGER,
-        allowNull:false,
+        allowNull:true,
     },
     updated_on:{
         type:Sequelize.DATE,
@@ -40,6 +52,6 @@ const Sector=sequelize.define('sectors',{
 },{
     freezeTableName:true
 });
-module.exports=Sector;
+module.exports=Coupon;
 
 

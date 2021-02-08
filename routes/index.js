@@ -2,11 +2,22 @@ const companyRoutes=require('./companies.route');
 const rolesRoutes=require('./roles.route');
 const usersRoutes=require('./users.route');
 const countryRoutes=require('./countries.route');
+const sectorRoutes=require('./sectors.route');
+const employeeRoute=require('./employee_strength.route');
+const avrageempRoute=require('./average_employee.route');
+const feedbackfreqRoute=require('./feedback_frequencies.route');
+const packagesRoute=require('./package.route');
+const couponsRoute=require('./coupons.route');
 module.exports =(router) =>{    
     companyRoutes(router);
     rolesRoutes(router);
     usersRoutes(router);
     countryRoutes(router);
+    sectorRoutes(router);
+    employeeRoute(router);
+    avrageempRoute(router);
+    feedbackfreqRoute(router);
+    packagesRoute(router);
+    couponsRoute(router);
     return router;
-
 };

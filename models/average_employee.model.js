@@ -1,14 +1,14 @@
 const { INTEGER, ENUM } = require('sequelize');
 const Sequelize=require('sequelize');
 const sequelize=require('../config/database');
-const Sector=sequelize.define('sectors',{
+const Averageemployee=sequelize.define('average_employees',{
     id:{
         type:Sequelize.INTEGER,
         allowNull:false,
         autoIncrement:true,
         primaryKey:true
     },
-    sector_name:{
+    average_employees:{
         type:Sequelize.CHAR,
         allowNull:false,
     },
@@ -22,11 +22,11 @@ const Sector=sequelize.define('sectors',{
     },
     created_on:{
         type:Sequelize.DATE,
-        allowNull:true,
+        allowNull:false,
     },
     updated_by:{
         type:Sequelize.INTEGER,
-        allowNull:false,
+        allowNull:true,
     },
     updated_on:{
         type:Sequelize.DATE,
@@ -40,6 +40,6 @@ const Sector=sequelize.define('sectors',{
 },{
     freezeTableName:true
 });
-module.exports=Sector;
+module.exports=Averageemployee;
 
 

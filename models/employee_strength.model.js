@@ -1,14 +1,14 @@
 const { INTEGER, ENUM } = require('sequelize');
 const Sequelize=require('sequelize');
 const sequelize=require('../config/database');
-const Sector=sequelize.define('sectors',{
+const Employee=sequelize.define('employee_strengths',{
     id:{
         type:Sequelize.INTEGER,
         allowNull:false,
         autoIncrement:true,
         primaryKey:true
     },
-    sector_name:{
+    number_of_employee:{
         type:Sequelize.CHAR,
         allowNull:false,
     },
@@ -40,6 +40,6 @@ const Sector=sequelize.define('sectors',{
 },{
     freezeTableName:true
 });
-module.exports=Sector;
+module.exports=Employee;
 
 
