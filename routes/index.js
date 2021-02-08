@@ -7,6 +7,7 @@ const employeeRoute=require('./employee_strength.route');
 const avrageempRoute=require('./average_employee.route');
 const feedbackfreqRoute=require('./feedback_frequencies.route');
 const packagesRoute=require('./package.route');
+const couponsRoute=require('./coupons.route');
 module.exports =(router) =>{    
     companyRoutes(router);
     rolesRoutes(router);
@@ -17,5 +18,6 @@ module.exports =(router) =>{
     avrageempRoute(router);
     feedbackfreqRoute(router);
     packagesRoute(router);
+    couponsRoute(router);
     return router;
 };
