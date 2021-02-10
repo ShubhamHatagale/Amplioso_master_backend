@@ -1,6 +1,7 @@
 // const Mysqli = require('mysql2');
 const jwt = require('jsonwebtoken');
 const log4js=require('log4js')
+const multer=require('multer');
 
 const today = new Date();
 // console.log(today)

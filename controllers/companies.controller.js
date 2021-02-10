@@ -1,6 +1,7 @@
 const Company=require('../models/companies.model');
 const { validationResult } = require('express-validator');
 const helper=require('../config/helpers')
+// const 
 
 
 exports.getRecords =async  (req,res,next)=>{
@@ -27,15 +28,24 @@ exports.getRecords =async  (req,res,next)=>{
 }
 
 exports.postRecords=async(req,res,next)=>{
-    const errors=validationResult(req);
+   console.log("data: ",req.body);
+   /*  const errors=validationResult(req);
     if(!errors.isEmpty()){
         return res.status(401).json({
           status: 401,
           message: 'Validation Fialed',
           error: errors  
       })
-    }
-    const post = new Company({          
+    } */
+    // if(!req.file){
+    //   return res.status(422).json({
+    //     status: 422,
+    //     message: 'No image Provided'         
+    // })
+    // }
+    // const imageUrl=req.file;
+    // console.log(imageUrl);       
+   /* const post = new Company({          
       company_name:req.body.company_name,
       company_logo:req.body.company_logo,
       comapany_headquaters:req.body.comapany_headquaters,
@@ -58,7 +68,7 @@ exports.postRecords=async(req,res,next)=>{
       })
       .catch(err => {
         console.log(err);
-      });
+      }); */
   
 };
 exports.updateRecords = async (req, res, next) => {
