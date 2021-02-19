@@ -31,47 +31,65 @@ const logger=log4js.getLogger();
 module.exports = {
     secret: secret,
     logger:logger,
-    validJWTNeeded: (req, res, next) => {
-        if (req.headers['authorization']) {            
-            try {
-                let authorization = req.headers['authorization'].split(' ');
-                if (authorization[0] !== 'Bearer') {
-                    return res.status(401).json({
-                        message:"Unauthorized"
-                    });;
-                } else {
-                    req.jwt = jwt.verify(authorization[1], secret);
-                    return next();
-                }
-            } catch (err) {
-                return res.status(403).json({
-                    message:"Authentication faileds"
-                });
-            }
-        } else {
-            return res.status(401).json({
-                message:"No authorization header found."
-            });
-        }
-    },    
-    hasAuthFields: (req, res, next) => {
-        let errors = [];
+    // validJWTNeeded: (req, res, next) => {
+    //     if (req.headers['authorization']) {            
+    //         try {
+    //             let authorization = req.headers['authorization'].split(' ');
+    //             if (authorization[0] !== 'Bearer') {
+    //                 return res.status(401).json({
+    //                     message:"Unauthorized"
+    //                 });;
+    //             } else {
+    //                 req.jwt = jwt.verify(authorization[1], secret);
+    //                 return next();
+    //             }
+    //         } catch (err) {
+    //             return res.status(403).json({
+    //                 message:"Authentication faileds"
+    //             });
+    //         }
+    //     } else {
+    //         return res.status(401).json({
+    //             message:"No authorization header found."
+    //         });
+    //     }
+    // },    
+    // hasAuthFields: (req, res, next) => {
+    //     let errors = [];
 
-        if (req.body) {
-            if (!req.body.email) {
-                errors.push('Missing email field');
-            }
-            if (!req.body.password) {
-                errors.push('Missing password field');
-            }
+    //     if (req.body) {
+    //         if (!req.body.email) {
+    //             errors.push('Missing email field');
+    //         }
+    //         if (!req.body.password) {
+    //             errors.push('Missing password field');
+    //         }
 
-            if (errors.length) {
-                return res.status(400).send({errors: errors.join(',')});
-            } else {
-                return next();
-            }
-        } else {
-            return res.status(400).send({errors: 'Missing email and password fields'});
+    //         if (errors.length) {
+    //             return res.status(400).send({errors: errors.join(',')});
+    //         } else {
+    //             return next();
+    //         }
+    //     } else {
+    //         return res.status(400).send({errors: 'Missing email and password fields'});
+    //     }
+    // } ,
+    fileStorage: multer.diskStorage({
+        destination: (req, file, cb) => {
+            console.log('here');
+            cb(null, './assets/images')
+        },
+        filename: (req, file, cb) => {
+            // cb(null, new Date().toISOString() + '-' + file.originalname)
+            cb(null, file.originalname)
         }
-    }    
+    }),
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg' || file.mimetype === 'video/mp4') {
+            cb(null, true)
+        } else {
+            cb(null, false)
+        }
+    }
+  
 };

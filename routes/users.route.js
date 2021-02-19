@@ -5,6 +5,7 @@ const { body } = require('express-validator');
 const helper=require('../config/helpers')
 module.exports=(router)=>{
   router.get('/users',usersController.getRecords);
+  router.get('/users/:userId',usersController.getRecordsById);
   router.post('/users',
   [
       body('first_name').isString(),

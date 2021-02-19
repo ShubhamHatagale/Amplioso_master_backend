@@ -3,6 +3,8 @@ const { body } = require('express-validator');
 const helper=require('../config/helpers')
 module.exports=(router)=>{
   router.get('/coupon',couponsController.getRecords);
+  router.get('/coupon/:couponId',couponsController.getRecordsById)
+
   router.post('/coupon',[
       body('coupon_percentage')
       .trim()       
