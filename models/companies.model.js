@@ -17,7 +17,7 @@ const Company=sequelize.define('companies',{
         allowNull:true
     },
     comapany_headquaters:{
-        type:Sequelize.STRING,
+        type:Sequelize.INTEGER,
         allowNull:false
     },
     date_of_inception:{
