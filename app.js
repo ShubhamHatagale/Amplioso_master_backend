@@ -29,7 +29,8 @@ app.use('/masters',routes(router))
 
 
 sequelize.sync().then(result=>{
-    app.listen(PORT);
+    app.listen(8000);
+    console.log("app is running at: ",PORT);
 }).catch(err=>{
-    // console.log(err)
+    console.log(err);
 })
