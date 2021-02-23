@@ -1,11 +1,11 @@
-const Role=require('../models/roles.model');
+const Package=require('../models/package.model');
 const { validationResult } = require('express-validator');
 const helper=require('../config/helpers')
 
 
 exports.getRecords =async  (req,res,next)=>{
     try {
-          const Data = await Role.findAll({where: {is_deleted:'0'} });
+          const Data = await Package.findAll({where: {is_deleted:0} });
           if(!Data){            
             return res.status(404).json({
               status: 404,
@@ -27,7 +27,7 @@ exports.getRecords =async  (req,res,next)=>{
 }
 exports.getRecordsById=async(req,res,next)=>{
   try {
-    const Data = await Role.findAll({where: {id: req.params.roleId,is_deleted:'0'} });
+    const Data = await Package.findAll({where: {id: req.params.packId,is_deleted:0} });
     if(!Data){            
       return res.status(404).json({
         status: 404,
@@ -48,7 +48,9 @@ helper.logger.info(error)
 }}
 
 
+
 exports.postRecords=async(req,res,next)=>{
+  console.log(req.body);
     const errors=validationResult(req);
     if(!errors.isEmpty()){
         return res.status(401).json({
@@ -57,12 +59,15 @@ exports.postRecords=async(req,res,next)=>{
           error: errors  
       })
     }
-    const role = new Role({          
-      role:req.body.role,
+    const package = new Package({          
+        package_name:req.body.package_name,
+        no_of_employees:req.body.no_of_employees,
+        end_date:req.body.end_date,
+        start_date:req.body.start_date,
       created_by:req.body.created_by,
-      updated_by:req.body.updated_by,      
+      created_on:req.body.created_on,      
     });
-    role
+    package
       .save()
       .then(result => {
         res.status(201).json({
@@ -77,23 +82,27 @@ exports.postRecords=async(req,res,next)=>{
   
 };
 exports.updateRecords = async (req, res, next) => {
+  console.log(req.body);
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(401).json({
       status: 401,
-      message: 'Validation Fialed',/** commit changes */
+      message: 'Validation Fialed',
       error: errors  
   })
   }
   try{
-  const roledetails =await Role.update({
-     role:req.body.role,
-      created_by:req.body.created_by,
-      updated_by:req.body.updated_by           
+  const packagedetails =await Package.update({
+    package_name:req.body.package_name,
+    no_of_employees:req.body.no_of_employees,
+    end_date:req.body.end_date,
+    start_date:req.body.start_date,
+    created_by:req.body.created_by,
+    created_on:req.body.created_on          
 },
-{where: {id: req.params.roleId} });
+{where: {id: req.params.packId} });
 
-  if(!roledetails){
+  if(!packagedetails){
     return res.status(200).json({
       status: 404,
       message: 'No data found'   
@@ -113,7 +122,7 @@ exports.updateRecords = async (req, res, next) => {
 }    
   }
 exports.deleteRecords = async (req, res, next) => {
-    const roleid = req.params.id;
+    const packid = req.params.id;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(401).json({
@@ -123,10 +132,10 @@ exports.deleteRecords = async (req, res, next) => {
     })
     }
     try{
-    const details =await Role.update({
-      is_deleted:'1'
+    const details =await Package.update({
+      is_deleted:1
   },
-  {where: {id: roleid} });
+  {where: {id: packid} });
   
     if(!details){
       return res.status(200).json({

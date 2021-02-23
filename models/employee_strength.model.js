@@ -1,16 +1,20 @@
-const { INTEGER } = require('sequelize');
+const { INTEGER, ENUM } = require('sequelize');
 const Sequelize=require('sequelize');
 const sequelize=require('../config/database');
-const Role=sequelize.define('roles',{
+const Employee=sequelize.define('employee_strengths',{
     id:{
         type:Sequelize.INTEGER,
         allowNull:false,
         autoIncrement:true,
         primaryKey:true
     },
-    role:{
+    number_of_employee:{
         type:Sequelize.CHAR,
         allowNull:false,
+    },
+    status:{
+        type:ENUM('Active','Inactive'),
+        allowNull:false
     },
     created_by:{
         type:Sequelize.INTEGER,
@@ -33,10 +37,9 @@ const Role=sequelize.define('roles',{
         defaultValue:'0',
         allowNull:false
     },   
-   
 },{
     freezeTableName:true
 });
-module.exports=Role;
+module.exports=Employee;
 
 

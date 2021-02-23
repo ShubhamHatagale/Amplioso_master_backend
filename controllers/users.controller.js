@@ -3,11 +3,9 @@ const { validationResult } = require('express-validator');
 const helper=require('../config/helpers')
 var crypto = require('crypto');
 
-
-
 exports.getRecords =async  (req,res,next)=>{
     try {
-          const Data = await User.findAll();
+          const Data = await User.findAll({where: {is_deleted:0} });
           if(!Data){            
             return res.status(404).json({
               status: 404,
@@ -28,19 +26,43 @@ exports.getRecords =async  (req,res,next)=>{
     }   
 }
 
-exports.postRecords=async(req,res,next)=>{
-    const errors=validationResult(req);
-var hash = crypto.createHash('sha512');
-data = hash.update(req.body.password, 'utf-8');
-gen_hash= data.digest('hex');
+exports.getRecordsById=async(req,res,next)=>{
+  try {
+    const Data = await User.findAll({where: {id: req.params.userId,is_deleted:0} });
+    if(!Data){            
+      return res.status(404).json({
+        status: 404,
+        message: 'could not find result',              
+    })
+  }
+  res.status(200).json({
+      message:"Result Fetched",
+      data:Data
+  }) 
+  helper.logger.info(Data)     
+} catch (error) {
+if (!error.statusCode) {
+  error.statusCode = 500;
+}
+next(error);   
+helper.logger.info(error)
+}}
 
-    if(!errors.isEmpty()){
-        return res.status(401).json({
-          status: 401,
+
+exports.postRecords=(req,res,next)=>{
+  console.log(req.body)
+
+const errors=validationResult(req);
+// var hash = crypto.createHash('sha512');
+// let data = hash.update(req.body.password, 'utf-8');
+// gen_hash= data.digest('hex');
+    /* if(!errors.isEmpty()){
+        return res.status(402).json({
+          status: 402,
           message: 'Validation Fialed',
           error: errors  
       })
-    }
+    } */
     const user = new User({          
         first_name:req.body.first_name,
         last_name:req.body.last_name,
@@ -52,7 +74,8 @@ gen_hash= data.digest('hex');
         mobile_no:req.body.mobile_no,
         user_email:req.body.user_email,
         username:req.body.username,
-        password:gen_hash,
+        password:req.body.password,
+        gender:req.body.gender,
         address:req.body.address,
       created_by:req.body.created_by,
       updated_by:req.body.updated_by,      
@@ -62,12 +85,16 @@ gen_hash= data.digest('hex');
       .then(result => {
         res.status(201).json({
           message: 'Post created successfully!',
-          post: result
+          post: result,
+          status:200
         });
       })
       .catch(err => {
-        console.log(err);
-      });
+        res.status(201).json({
+          message: 'Failed Request!',
+          post: err
+        });     
+       });
   
 };
 exports.updateRecords = async (req, res, next) => {
@@ -123,29 +150,38 @@ exports.updateRecords = async (req, res, next) => {
 }    
   }
 exports.deleteRecords = async (req, res, next) => {
-    const id = req.params.id;
+    const userId = req.params.id;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(401).json({
+        status: 401,
+        message: 'Validation Fialed',
+        error: errors  
+    })
+    }
     try{
-    const userdetails=await User.destroy({
-        where: { id: id }
-       });
-    if(!userdetails){
-      return res.status(200).send({
+    const details =await User.update({
+      is_deleted:1
+  },
+  {where: {id: userId} });
+  
+    if(!details){
+      return res.status(200).json({
         status: 404,
         message: 'No data found'   
     })
+    }
+    res.status(200).json({
+      status: 200,
+      message: 'Record Deleted Successfully',
+   }); 
+  }catch(error){
+    console.log(error)
+    return res.status(400).send({
+      message:'Unable to Delete Record',
+      errors: error,
+      status: 400
+  });
   }
-  res.status(200).send({
-    status: 200,
-    message: 'Data Delete Successfully'
- });
-}
-catch(error){
-  console.log(error)
-  return res.status(400).send({
-    message:'Unable to Delete data',
-    errors: error,
-    status: 400
-});
-}
 };
 

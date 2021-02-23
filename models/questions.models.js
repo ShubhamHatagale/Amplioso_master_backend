@@ -1,16 +1,36 @@
-const { INTEGER } = require('sequelize');
+const { INTEGER, ENUM } = require('sequelize');
 const Sequelize=require('sequelize');
 const sequelize=require('../config/database');
-const Role=sequelize.define('roles',{
+const Question=sequelize.define('questions',{
     id:{
         type:Sequelize.INTEGER,
         allowNull:false,
         autoIncrement:true,
         primaryKey:true
     },
-    role:{
-        type:Sequelize.CHAR,
+    question:{
+        type:Sequelize.TEXT,
         allowNull:false,
+    },
+    options:{
+        type:Sequelize.TEXT,
+        allowNull:false
+    },
+    option1:{
+        type:Sequelize.TEXT,
+        allowNull:false
+    },
+    option2:{
+        type:Sequelize.TEXT,
+        allowNull:false
+    },
+    option3:{
+        type:Sequelize.TEXT,
+        allowNull:false
+    },
+    option4:{
+        type:Sequelize.TEXT,
+        allowNull:false
     },
     created_by:{
         type:Sequelize.INTEGER,
@@ -18,11 +38,11 @@ const Role=sequelize.define('roles',{
     },
     created_on:{
         type:Sequelize.DATE,
-        allowNull:true,
+        allowNull:false,
     },
     updated_by:{
         type:Sequelize.INTEGER,
-        allowNull:false,
+        allowNull:true,
     },
     updated_on:{
         type:Sequelize.DATE,
@@ -33,10 +53,9 @@ const Role=sequelize.define('roles',{
         defaultValue:'0',
         allowNull:false
     },   
-   
 },{
     freezeTableName:true
 });
-module.exports=Role;
+module.exports=Question;
 
 

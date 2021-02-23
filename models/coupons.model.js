@@ -1,28 +1,44 @@
-const { INTEGER } = require('sequelize');
+const { INTEGER, ENUM } = require('sequelize');
 const Sequelize=require('sequelize');
 const sequelize=require('../config/database');
-const Role=sequelize.define('roles',{
+const Coupon=sequelize.define('coupons',{
     id:{
         type:Sequelize.INTEGER,
         allowNull:false,
         autoIncrement:true,
         primaryKey:true
     },
-    role:{
+    coupon_name:{
         type:Sequelize.CHAR,
         allowNull:false,
     },
+    coupon_percentage:{
+        type:Sequelize.INTEGER,
+        allowNull:false
+    },
+    package:{
+        type:ENUM('Single','Multiple'),
+        allowNull:false
+    },
+    start_date:{
+        type:Sequelize.DATE,
+        allowNull:false,
+    },
+    end_date:{
+        type:Sequelize.DATE,
+        allowNull:false,
+    },   
     created_by:{
         type:Sequelize.INTEGER,
         allowNull:false,
     },
     created_on:{
         type:Sequelize.DATE,
-        allowNull:true,
+        allowNull:false,
     },
     updated_by:{
         type:Sequelize.INTEGER,
-        allowNull:false,
+        allowNull:true,
     },
     updated_on:{
         type:Sequelize.DATE,
@@ -33,10 +49,9 @@ const Role=sequelize.define('roles',{
         defaultValue:'0',
         allowNull:false
     },   
-   
 },{
     freezeTableName:true
 });
-module.exports=Role;
+module.exports=Coupon;
 
 

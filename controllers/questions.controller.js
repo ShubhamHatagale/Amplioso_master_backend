@@ -1,11 +1,11 @@
-const Role=require('../models/roles.model');
+const Questions=require('../models/questions.models');
 const { validationResult } = require('express-validator');
 const helper=require('../config/helpers')
 
 
 exports.getRecords =async  (req,res,next)=>{
     try {
-          const Data = await Role.findAll({where: {is_deleted:'0'} });
+          const Data = await Questions.findAll({where: {is_deleted:0} });
           if(!Data){            
             return res.status(404).json({
               status: 404,
@@ -27,7 +27,7 @@ exports.getRecords =async  (req,res,next)=>{
 }
 exports.getRecordsById=async(req,res,next)=>{
   try {
-    const Data = await Role.findAll({where: {id: req.params.roleId,is_deleted:'0'} });
+    const Data = await Questions.findAll({where: {id: req.params.questionId,is_deleted:0} });
     if(!Data){            
       return res.status(404).json({
         status: 404,
@@ -48,6 +48,7 @@ helper.logger.info(error)
 }}
 
 
+
 exports.postRecords=async(req,res,next)=>{
     const errors=validationResult(req);
     if(!errors.isEmpty()){
@@ -57,18 +58,22 @@ exports.postRecords=async(req,res,next)=>{
           error: errors  
       })
     }
-    const role = new Role({          
-      role:req.body.role,
+    const question = new Questions({          
+        question:req.body.question,
+        options:req.body.options,
+        option1:req.body.option1,
+        option2:req.body.option2,
+        option3:req.body.option3,
+        option4:req.body.option4,
       created_by:req.body.created_by,
-      updated_by:req.body.updated_by,      
+      created_on:req.body.created_on,      
     });
-    role
+    question
       .save()
       .then(result => {
         res.status(201).json({
           message: 'Post created successfully!',
-          post: result,
-          status:200
+          post: result
         });
       })
       .catch(err => {
@@ -86,14 +91,19 @@ exports.updateRecords = async (req, res, next) => {
   })
   }
   try{
-  const roledetails =await Role.update({
-     role:req.body.role,
-      created_by:req.body.created_by,
-      updated_by:req.body.updated_by           
+  const questiondetails =await Questions.update({
+    question:req.body.question,
+    options:req.body.options,
+    option1:req.body.option1,
+    option2:req.body.option2,
+    option3:req.body.option3,
+    option4:req.body.option4,
+    created_by:req.body.created_by,
+    created_on:req.body.created_on           
 },
-{where: {id: req.params.roleId} });
+{where: {id: req.params.questionId} });
 
-  if(!roledetails){
+  if(!questiondetails){
     return res.status(200).json({
       status: 404,
       message: 'No data found'   
@@ -113,7 +123,7 @@ exports.updateRecords = async (req, res, next) => {
 }    
   }
 exports.deleteRecords = async (req, res, next) => {
-    const roleid = req.params.id;
+    const questionid = req.params.id;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(401).json({
@@ -123,10 +133,10 @@ exports.deleteRecords = async (req, res, next) => {
     })
     }
     try{
-    const details =await Role.update({
-      is_deleted:'1'
+    const details =await Questions.update({
+      is_deleted:1
   },
-  {where: {id: roleid} });
+  {where: {id: questionid} });
   
     if(!details){
       return res.status(200).json({
