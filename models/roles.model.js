@@ -29,10 +29,10 @@ const Role=sequelize.define('roles',{
         allowNull:true,
     },
     is_deleted:{
-        type:Sequelize.ENUM('0', '1'),
+        type:Sequelize.BOOLEAN,
         defaultValue:'0',
         allowNull:false
-    },
+    },   
    
 },{
     freezeTableName:true

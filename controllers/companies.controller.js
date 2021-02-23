@@ -50,21 +50,21 @@ next(error);
 helper.logger.info(error)
 }}
 exports.postRecords=async(req,res,next)=>{  
-  // console.log(req.file.path);
-     const errors=validationResult(req);
-    if(!errors.isEmpty()){
-        return res.status(401).json({
-          status: 401,
-          message: 'Validation Fialed',
-          error: errors  
-      })
-    } 
+  console.log(req.body);
+    //  const errors=validationResult(req);
+    // if(!errors.isEmpty()){
+    //     return res.status(201).json({
+    //       status: 204,
+    //       message: 'Validation Fialed',
+    //       error: errors  
+    //   })
+    // } 
   
-    if (!req.file) {
-      const error = new Error('No image provided.');
-      error.statusCode = 422;
-      throw error;
-    }
+    // if (!req.file) {
+    //   const error = new Error('No image provided.');
+    //   error.statusCode = 422;
+    //   throw error;
+    // }
    const post =await new Company({          
       company_name:req.body.company_name,
       company_logo:req.file.originalname,

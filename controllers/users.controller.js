@@ -52,17 +52,17 @@ helper.logger.info(error)
 exports.postRecords=(req,res,next)=>{
   console.log(req.body)
 
-    const errors=validationResult(req);
-var hash = crypto.createHash('sha512');
-data = hash.update(req.body.password, 'utf-8');
-gen_hash= data.digest('hex');
-    if(!errors.isEmpty()){
-        return res.status(401).json({
-          status: 401,
+const errors=validationResult(req);
+// var hash = crypto.createHash('sha512');
+// let data = hash.update(req.body.password, 'utf-8');
+// gen_hash= data.digest('hex');
+    /* if(!errors.isEmpty()){
+        return res.status(402).json({
+          status: 402,
           message: 'Validation Fialed',
           error: errors  
       })
-    }
+    } */
     const user = new User({          
         first_name:req.body.first_name,
         last_name:req.body.last_name,
@@ -74,7 +74,8 @@ gen_hash= data.digest('hex');
         mobile_no:req.body.mobile_no,
         user_email:req.body.user_email,
         username:req.body.username,
-        password:gen_hash,
+        password:req.body.password,
+        gender:req.body.gender,
         address:req.body.address,
       created_by:req.body.created_by,
       updated_by:req.body.updated_by,      
@@ -84,7 +85,8 @@ gen_hash= data.digest('hex');
       .then(result => {
         res.status(201).json({
           message: 'Post created successfully!',
-          post: result
+          post: result,
+          status:200
         });
       })
       .catch(err => {

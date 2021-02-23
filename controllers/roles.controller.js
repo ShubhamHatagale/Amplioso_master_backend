@@ -5,7 +5,7 @@ const helper=require('../config/helpers')
 
 exports.getRecords =async  (req,res,next)=>{
     try {
-          const Data = await Role.findAll({where: {is_deleted:0} });
+          const Data = await Role.findAll({where: {is_deleted:'0'} });
           if(!Data){            
             return res.status(404).json({
               status: 404,
@@ -27,7 +27,7 @@ exports.getRecords =async  (req,res,next)=>{
 }
 exports.getRecordsById=async(req,res,next)=>{
   try {
-    const Data = await Role.findAll({where: {id: req.params.roleId,is_deleted:0} });
+    const Data = await Role.findAll({where: {id: req.params.roleId,is_deleted:'0'} });
     if(!Data){            
       return res.status(404).json({
         status: 404,
@@ -67,7 +67,8 @@ exports.postRecords=async(req,res,next)=>{
       .then(result => {
         res.status(201).json({
           message: 'Post created successfully!',
-          post: result
+          post: result,
+          status:200
         });
       })
       .catch(err => {
@@ -123,7 +124,7 @@ exports.deleteRecords = async (req, res, next) => {
     }
     try{
     const details =await Role.update({
-      is_deleted:1
+      is_deleted:'1'
   },
   {where: {id: roleid} });
   

@@ -5,7 +5,7 @@ const helper=require('../config/helpers')
 
 exports.getRecords =async  (req,res,next)=>{
     try {
-          const Data = await Country.findAll({where: {is_deleted:0} });
+          const Data = await Country.findAll({where: {is_deleted:'0'} });
           if(!Data){            
             return res.status(404).json({
               status: 404,
@@ -27,7 +27,7 @@ exports.getRecords =async  (req,res,next)=>{
 }
 exports.getRecordsById=async(req,res,next)=>{
   try {
-    const Data = await Country.findAll({where: {id: req.params.countryId,is_deleted:0} });
+    const Data = await Country.findAll({where: {id: req.params.countryId,is_deleted:'0'} });
     if(!Data){            
       return res.status(404).json({
         status: 404,
@@ -60,6 +60,7 @@ exports.postRecords=async(req,res,next)=>{
     const country = new Country({          
       country_name:req.body.country_name,
       status:req.body.status,
+      created_on:req.body.created_on,
       created_by:req.body.created_by,
       updated_by:req.body.updated_by,      
     });
@@ -68,7 +69,8 @@ exports.postRecords=async(req,res,next)=>{
       .then(result => {
         res.status(201).json({
           message: 'Post created successfully!',
-          post: result
+          post: result,
+          status:200
         });
       })
       .catch(err => {
@@ -126,7 +128,7 @@ exports.deleteRecords = async (req, res, next) => {
     }
     try{
     const details =await Country.update({
-      is_deleted:1
+      is_deleted:'1'
   },
   {where: {id: countryid} });
   
