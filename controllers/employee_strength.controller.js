@@ -16,7 +16,6 @@ exports.getRecords =async  (req,res,next)=>{
             message:"Result Fetched",
             data:Data
         }) 
-        helper.logger.info(Data)     
     } catch (error) {
       if (!error.statusCode) {
         error.statusCode = 500;
@@ -38,7 +37,6 @@ exports.getRecordsById=async(req,res,next)=>{
       message:"Result Fetched",
       data:Data
   }) 
-  helper.logger.info(Data)     
 } catch (error) {
 if (!error.statusCode) {
   error.statusCode = 500;
@@ -48,14 +46,6 @@ helper.logger.info(error)
 }}
 
 exports.postRecords=async(req,res,next)=>{
-    const errors=validationResult(req);
-    if(!errors.isEmpty()){
-        return res.status(401).json({
-          status: 401,
-          message: 'Validation Fialed',
-          error: errors  
-      })
-    }
     const employee = new Employee({          
       number_of_employee:req.body.number_of_employee,
       status:req.body.status,
@@ -72,21 +62,12 @@ exports.postRecords=async(req,res,next)=>{
         });
       })
       .catch(err => {
+        helper.logger.info(err)
         console.log(err);
       });
   
 };
 exports.updateRecords = async (req, res, next) => {
-  console.log(req.params.empId);
-  console.log(req.body)
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(401).json({
-      status: 401,
-      message: 'Validation Fialed',
-      error: errors  
-  })
-  }
   try{
   const employeedetails =await Employee.update({
     number_of_employee:req.body.number_of_employee,
@@ -108,25 +89,15 @@ exports.updateRecords = async (req, res, next) => {
     message: 'Data Updated Successfully',
  }); 
 }catch(error){
-  console.log(error)
-  return res.status(400).send({
+  helper.logger.info(error)
+  return res.status(500).send({
     message:'Unable to Update data',
-    errors: error,
-    status: 400
+    status: 500
 });
 }    
   }
 exports.deleteRecords = async (req, res, next) => {
     const id = req.params.id;
-
-const errors = validationResult(req);
-if (!errors.isEmpty()) {
-  return res.status(401).json({
-    status: 401,
-    message: 'Validation Fialed',
-    error: errors  
-})
-}
 try{
 const details =await Employee.update({
   is_deleted:1
@@ -144,11 +115,10 @@ res.status(200).json({
   message: 'Record Deleted Successfully',
 }); 
 }catch(error){
-console.log(error)
-return res.status(400).send({
+  helper.logger.info(error)
+  return res.status(500).send({
   message:'Unable to Delete Record',
-  errors: error,
-  status: 400
+  status: 500
 });
 }    
 }

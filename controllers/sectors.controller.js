@@ -49,15 +49,28 @@ helper.logger.info(error)
 
 
 
-exports.postRecords=async(req,res,next)=>{
-    const errors=validationResult(req);
-    if(!errors.isEmpty()){
-        return res.status(401).json({
-          status: 401,
-          message: 'Validation Fialed',
-          error: errors  
-      })
-    }
+exports.postRecords=async(req,res,next)=>{ 
+  // console.log("In controller");
+    // console.log(req.body)
+    // const errors = validationResult(req);
+
+    // if (!errors.isEmpty()) {
+    //     return res.status(422).json({errors: errors.array()});
+    // }
+    // else{
+      // const errors = validationResult(req);
+      // if(!errors.isEmpty()) {
+      //   console.log(errors);
+      //   return res.status(400).json({
+      //     error: {
+      //       message: errors.array()
+      //     }
+      //   });
+      // }    
+      try{
+      validationResult(req).throw();
+
+  
     const sector = new Sector({          
         sector_name:req.body.sector_name,
         status:req.body.status,
@@ -74,8 +87,12 @@ exports.postRecords=async(req,res,next)=>{
         });
       })
       .catch(err => {
-        console.log(err);
+        console.log("error:",err);
+        helper.logger.info(err)
       });
+    }catch (err) {
+      res.status(422).json(err);
+    }
   
 };
 exports.updateRecords = async (req, res, next) => {
@@ -107,11 +124,10 @@ exports.updateRecords = async (req, res, next) => {
     message: 'Data Updated Successfully',
  }); 
 }catch(error){
-  console.log(error)
-  return res.status(400).send({
+  helper.logger.info(error)
+  return res.status(500).send({
     message:'Unable to Update data',
-    errors: error,
-    status: 400
+    status: 500
 });
 }    
   }
@@ -142,11 +158,10 @@ exports.deleteRecords = async (req, res, next) => {
       message: 'Record Deleted Successfully',
    }); 
   }catch(error){
-    console.log(error)
-    return res.status(400).send({
+    helper.logger.info(error)
+    return res.status(500).send({
       message:'Unable to Delete Record',
-      errors: error,
-      status: 400
+      status: 500
   });
   }
 };

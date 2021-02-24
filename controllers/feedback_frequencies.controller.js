@@ -49,14 +49,6 @@ helper.logger.info(error)
 
 
 exports.postRecords=async(req,res,next)=>{
-    const errors=validationResult(req);
-    if(!errors.isEmpty()){
-        return res.status(401).json({
-          status: 401,
-          message: 'Validation Fialed',
-          error: errors  
-      })
-    }
     const feedback = new Feedback({          
         feedback_frequencies:req.body.feedback_frequencies,
       status:req.body.status,
@@ -73,19 +65,13 @@ exports.postRecords=async(req,res,next)=>{
         });
       })
       .catch(err => {
+        helper.logger.info(error)
+
         console.log(err);
       });
   
 };
 exports.updateRecords = async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(401).json({
-      status: 401,
-      message: 'Validation Fialed',
-      error: errors  
-  })
-  }
   try{
   const feedbackdetails =await Feedback.update({
     feedback_frequencies:req.body.feedback_frequencies,
@@ -106,11 +92,10 @@ exports.updateRecords = async (req, res, next) => {
     message: 'Data Updated Successfully',
  }); 
 }catch(error){
-  console.log(error)
-  return res.status(400).send({
+  helper.logger.info(error)
+  return res.status(500).send({
     message:'Unable to Update data',
-    errors: error,
-    status: 400
+    status: 500
 });
 }    
   }
@@ -141,11 +126,10 @@ exports.deleteRecords = async (req, res, next) => {
       message: 'Record Deleted Successfully',
    }); 
   }catch(error){
-    console.log(error)
-    return res.status(400).send({
+    helper.logger.info(error)
+    return res.status(500).send({
       message:'Unable to Delete Record',
-      errors: error,
-      status: 400
+      status: 500
   });
   }
 };

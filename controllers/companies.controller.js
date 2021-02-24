@@ -88,19 +88,13 @@ exports.postRecords=async(req,res,next)=>{
     })
     .catch(err=>{
   console.log(err);
-    })
+  helper.logger.info(err)
+  })
    
 };
 exports.updateRecords = async (req, res, next) => {
   const comId = req.params.comId;
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(401).json({
-      status: 401,
-      message: 'Validation Fialed',
-      error: errors  
-  })
-  }
+  
   try{
   const companydetails =await Company.update({
      company_name:req.body.company_name,
@@ -129,25 +123,15 @@ exports.updateRecords = async (req, res, next) => {
     message: 'Data Updated Successfully',
  }); 
 }catch(error){
-  console.log(error)
-  return res.status(400).send({
+  helper.logger.info(error)
+  return res.status(500).send({
     message:'Unable to Update data',
-    errors: error,
-    status: 400
+    status: 500
 });
 }    
   }
 exports.deleteRecords = async (req, res, next) => {
   const comId = req.params.id;
-  console.log(comId)
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(401).json({
-      status: 401,
-      message: 'Validation Fialed',
-      error: errors  
-  })
-  }
   try{
   const companydetails =await Company.update({
     is_deleted:1
@@ -165,11 +149,10 @@ exports.deleteRecords = async (req, res, next) => {
     message: 'Record Deleted Successfully',
  }); 
 }catch(error){
-  console.log(error)
-  return res.status(400).send({
+  helper.logger.info(error)
+  return res.status(500).send({
     message:'Unable to Delete Record',
-    errors: error,
-    status: 400
+    status: 500
 });
 }    
   }

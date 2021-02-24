@@ -2,6 +2,8 @@ const companyController = require('../controllers/companies.controller');
 const { body } = require('express-validator');
 const multer = require('multer');
 const path = require('path');
+const { validate } = require('../config/validate');
+
 
 var storage =   multer.diskStorage({
   destination: function (req, file, callback) {
@@ -30,15 +32,36 @@ module.exports=(router)=>{
   router.get('/company/:comId',companyController.getRecordsById)
   router.post('/company', 
   upload,
-  //  [
-  //   body('company_name')
-  //   .custom(val => {   
-  //     if (body('company_name').isAlphanumeric() || val.indexOf('-') !== -1 ||val.indexOf('.') !== -1 ) return true
-  //     return false
-  //   }),    
-    // body('comapany_headquaters').isString()
-  // ], 
+  validate([
+    body('company_name')
+    .not().isEmpty().matches(/^[A-Za-z0-9-.]+$/).withMessage('Allow Alpha numric dash and dot and can not be empty'),     
+    body('comapany_headquaters').not().isEmpty().isString(),
+    body('date_of_inception').not().isEmpty().isDate(),
+    body('number_of_employee').not().isEmpty().isInt(),
+    body('business_sector').not().isEmpty().isInt(),
+    body('average_employee_compansation').not().isEmpty().isInt(),
+    body('feed_back_frequency').not().isEmpty().isInt(),
+    body('created_on').not().isEmpty().isDate().withMessage('Should be in date format and can not be empty'),
+    body('updated_by').not().isEmpty().isInt().withMessage('Should be Int and can not be empty'),
+    body('created_by').not().isEmpty().isInt().withMessage('Should be Int and can not be empty'),
+  ]),
+
 companyController.postRecords);
-  router.put('/company/:comId', upload,companyController.updateRecords);
+  router.put('/company/:comId',
+   upload,
+   validate([
+    body('company_name')
+    .not().isEmpty().matches(/^[A-Za-z0-9-.]+$/).withMessage('Allow Alpha numric dash and dot and can not be empty'),     
+    body('comapany_headquaters').not().isEmpty().isInt(),
+    body('date_of_inception').not().isEmpty().isDate(),
+    body('number_of_employee').not().isEmpty().isInt(),
+    body('business_sector').not().isEmpty().isInt(),
+    body('average_employee_compansation').not().isEmpty().isInt(),
+    body('feed_back_frequency').not().isEmpty().isInt(),
+    body('created_on').not().isEmpty().isDate().withMessage('Should be in date format and can not be empty'),
+    body('updated_by').not().isEmpty().isInt().withMessage('Should be Int and can not be empty'),
+    body('created_by').not().isEmpty().isInt().withMessage('Should be Int and can not be empty'),
+    ])
+,companyController.updateRecords);
   router.delete('/company/:id', companyController.deleteRecords);
 }

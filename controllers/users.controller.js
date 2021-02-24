@@ -50,19 +50,17 @@ helper.logger.info(error)
 
 
 exports.postRecords=(req,res,next)=>{
-  console.log(req.body)
 
-const errors=validationResult(req);
+// const errors=validationResult(req);
 // var hash = crypto.createHash('sha512');
 // let data = hash.update(req.body.password, 'utf-8');
 // gen_hash= data.digest('hex');
-    /* if(!errors.isEmpty()){
-        return res.status(402).json({
-          status: 402,
-          message: 'Validation Fialed',
-          error: errors  
-      })
-    } */
+    //  if(!errors.isEmpty()){
+    //     return res.send(422).json({
+
+    //     })
+    // } 
+    // else{
     const user = new User({          
         first_name:req.body.first_name,
         last_name:req.body.last_name,
@@ -90,11 +88,12 @@ const errors=validationResult(req);
         });
       })
       .catch(err => {
-        res.status(201).json({
+        helper.logger.info(err)
+        res.status(500).json({
           message: 'Failed Request!',
-          post: err
         });     
        });
+      // }
   
 };
 exports.updateRecords = async (req, res, next) => {
@@ -109,7 +108,7 @@ exports.updateRecords = async (req, res, next) => {
       message: 'Validation Fialed',
       error: errors  
   })
-  }
+  }el
   try{
       
   const userdetails =await User.update({
@@ -141,24 +140,17 @@ exports.updateRecords = async (req, res, next) => {
     message: 'Data Updated Successfully',
  }); 
 }catch(error){
-  console.log(error)
-  return res.status(400).send({
+  helper.logger.info(error)
+  return res.status(500).send({
     message:'Unable to Update data',
-    errors: error,
-    status: 400
+    status: 500
 });
+
 }    
   }
 exports.deleteRecords = async (req, res, next) => {
     const userId = req.params.id;
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(401).json({
-        status: 401,
-        message: 'Validation Fialed',
-        error: errors  
-    })
-    }
+    
     try{
     const details =await User.update({
       is_deleted:1
@@ -176,11 +168,10 @@ exports.deleteRecords = async (req, res, next) => {
       message: 'Record Deleted Successfully',
    }); 
   }catch(error){
-    console.log(error)
-    return res.status(400).send({
+    helper.logger.info(error)
+    return res.status(500).send({
       message:'Unable to Delete Record',
-      errors: error,
-      status: 400
+      status: 500
   });
   }
 };
